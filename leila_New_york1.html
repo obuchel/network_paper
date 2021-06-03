@@ -859,8 +859,8 @@ arr0[45],
 ],   
 'fill-outline-color':'black',    
 'fill-opacity': 0.8
-}
-
+},
+    'filter': ['!=', '$type', 'Point']
 },"state-label");    
          
 
@@ -2342,8 +2342,8 @@ for (var i=0; i<large_layers.length; i++){
 'fill-color':fill_arrays[e.target.value],   
 'fill-outline-color':'black',    
 'fill-opacity': 0.8
-}
-
+},
+'filter': ['!=', '$type', 'Point']
 },"state-label");  
             
          
@@ -2400,7 +2400,8 @@ else {
 'line-color': '#000000',
 'line-width': 0.2,
    'line-opacity': 1    
-}
+},
+	  'filter': ['!=', '$type', 'Point']
 },"state-label");  
         small_layers.push('small_communities_'+document.getElementById("mySelect").value);
     } else {
@@ -2477,7 +2478,8 @@ function add_covid(e) {
     'circle-stroke-width': 0.5,
 'circle-color': "grey",
      'circle-opacity': 1
-}
+},
+'filter': ['==', '$type', 'Point']
 },"state-label");
 
 	small_comms.push('small_communities_'+document.getElementById("mySelect").value);
@@ -2524,7 +2526,7 @@ map.setPaintProperty( 'covid', 'circle-opacity', 1);
 'line-color': 'yellow',
 'line-width': 0.5,
  'line-opacity': 1   
-}
+}	
 },"state-label");
                /*  } else {
               map.removeLayer("counties");
