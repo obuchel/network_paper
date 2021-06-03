@@ -80,6 +80,13 @@
     
     
 <script>
+
+
+  var small_comms=[];
+  var scale=d3.scalePow()
+      .exponent(2)
+      .domain([-1, 5623])
+      .range(["yellow", "red"]);
     var popup;
     var large_layers=[];
     var small_layers=[];
@@ -520,7 +527,8 @@ for (var i=0; i<d3.keys(communities).length; i++) {
     
 
     var data0=[];
-    var map;
+  var map;
+  //all_small_timelines_map.json
             fetch('classification_ids_counties2.json').then(res => res.json()) 
 .then(data10 => { 
         data0=data10;        
@@ -851,8 +859,8 @@ arr0[45],
 ],   
 'fill-outline-color':'black',    
 'fill-opacity': 0.8
-}
-
+},
+    'filter': ['!=', '$type', 'Point']
 },"state-label");    
          
 
@@ -2334,8 +2342,8 @@ for (var i=0; i<large_layers.length; i++){
 'fill-color':fill_arrays[e.target.value],   
 'fill-outline-color':'black',    
 'fill-opacity': 0.8
-}
-
+},
+'filter': ['!=', '$type', 'Point']
 },"state-label");  
             
          
@@ -2392,7 +2400,8 @@ else {
 'line-color': '#000000',
 'line-width': 0.2,
    'line-opacity': 1    
-}
+},
+	  'filter': ['!=', '$type', 'Point']
 },"state-label");  
         small_layers.push('small_communities_'+document.getElementById("mySelect").value);
     } else {
@@ -2450,21 +2459,42 @@ map.setPaintProperty( 'states', 'line-opacity', 1);
      }
 
 function add_covid(e) {
-if (document.getElementById("covid").checked == true) {
-//if (typeof map.getLayer('covid') == 'undefined') {
-map.addLayer({
-'id': 'covid',
+    if (document.getElementById("covid").checked == true) {
+
+        for (var i=0; i<small_comms.length; i++){
+            map.removeLayer(small_comms[i]);
+        }
+
+       small_comms=[];
+   // if (typeof map.getLayer('small_communities_'+document.getElementById("mySelect").value) == 'undefined') {                                                                      
+      map.addLayer({
+'id': 'small1_communities_'+document.getElementById("mySelect").value,
 'type': 'circle',
-'source': 'covid',
+'source': 'communities_small_'+document.getElementById("mySelect").value,
 'paint': {
-    'circle-radius':['get', 'max1'],
+    'circle-radius':{
+  "property": "COVID_cases",
+  "stops": [
+    [0, 0],
+    [10, 1],
+      [50, 5],
+      [100, 7],
+    [1000, 9],
+      [3000, 11],
+      [5700,15]
+  ]
+},
+    //['-', 1, ['number', ['get', 'COVID_cases'], 10]],
   'circle-stroke-color': '#000000',
     'circle-stroke-opacity': 1,
     'circle-stroke-width': 0.5,
 'circle-color': "grey",
      'circle-opacity': 1
-}
-},"state-label");    
+},
+'filter': ['==', '$type', 'Point']
+},"state-label");
+
+	small_comms.push('small1_communities_'+document.getElementById("mySelect").value);
         /* } else {
              
 map.setPaintProperty( 'covid', 'circle-opacity', 1);
@@ -2477,11 +2507,17 @@ map.setPaintProperty( 'covid', 'circle-opacity', 1);
 //console.log(document.getElementById("states").checked);
 //map.getLayer('states').setLayoutProperty( 'visibility', 'none');
 //map.setPaintProperty('covid', 'circle-opacity', 0);
-                var mapLayer = map.getLayer('covid');
+              /*  var mapLayer = map.getLayer('covid');
 
     if(typeof mapLayer !== 'undefined') {
               map.removeLayer("covid");
-    }
+	      }*/
+
+	      for (var i=0; i<small_comms.length; i++){
+            map.removeLayer(small_comms[i]);
+              }
+
+	     small_comms=[];
          }
     }
     
@@ -2502,7 +2538,7 @@ map.setPaintProperty( 'covid', 'circle-opacity', 1);
 'line-color': 'yellow',
 'line-width': 0.5,
  'line-opacity': 1   
-}
+}	
 },"state-label");
                /*  } else {
               map.removeLayer("counties");
