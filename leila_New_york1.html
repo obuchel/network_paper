@@ -2472,7 +2472,7 @@ function add_covid(e) {
 'type': 'circle',
 'source': 'communities_small_'+document.getElementById("mySelect").value,
 'paint': {
-    'circle-radius':["sqrt", ["/", ["get", "COVID_cases"], 100]],
+    'circle-radius':["linear", ["/", ["get", "COVID_cases"], 100]],
     //['-', 1, ['number', ['get', 'COVID_cases'], 10]],
   'circle-stroke-color': '#000000',
     'circle-stroke-opacity': 1,
